@@ -1,148 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Woodcraft Original Costing Pro</title>
-<style>
-body{
-font-family:Arial,sans-serif;
-background:#f4f4f4;
-margin:0;
-padding:15px;
-}
-.container{
-max-width:700px;
-margin:auto;
-background:white;
-padding:20px;
-border-radius:12px;
-box-shadow:0 0 10px rgba(0,0,0,.1);
-}
-h1{
-text-align:center;
-}
-input,select{
-width:100%;
-padding:10px;
-margin-top:5px;
-margin-bottom:12px;
-box-sizing:border-box;
-}
-button{
-width:100%;
-padding:12px;
-font-size:16px;
-background:black;
-color:white;
-border:none;
-border-radius:8px;
-}
-.result{
-margin-top:20px;
-padding:15px;
-background:#fafafa;
-border-radius:10px;
-}
-label{
-font-weight:bold;
-}
-</style>
+<title>Woodcraft Original</title>
 </head>
-<body>
-<div class="container">
+
+<body style="font-family:Arial;padding:30px">
+
 <h1>Woodcraft Original</h1>
-<h3>Acrylic Costing Pro</h3>
 
-Length (Inches)
-Breadth (Inches)
-Height (Inches)
-Product Type
-<option>Box</option>
-<option>Tray</option>
-</select>
+<h2>Acrylic Costing Pro</h2>
 
-Material
-<option>Indian</option>
-<option>Imported</option>
-<option>Colored</option>
-</select>
+Length:
+<input type="number" id="L"><br><br>
 
-Thickness
-<option>3mm</option>
-<option>4mm</option>
-</select>
+Breadth:
+<input type="number" id="B"><br><br>
 
-Complexity
-<option>Simple</option>
-<option>Medium</option>
-<option>Premium</option>
-</select>
+Height:
+<input type="number" id="H"><br><br>
 
-Additional Labour Charge (₹)
-Margin %
-Quantity
-Calculate
+<button onclick="test()">Calculate</button>
 
-<div class="result" id="result"></div>
-</div>
+<p id="result"></p>
+
 <script>
-function calculate(){
-let L=parseFloat(document.getElementById('L').value)||0;
-let B=parseFloat(document.getElementById('B').value)||0;
-let H=parseFloat(document.getElementById('H').value)||0;
-let ptype=document.getElementById('ptype').value;
-let material=document.getElementById('material').value;
-let thickness=document.getElementById('thickness').value;
-let complexity=document.getElementById('complexity').value;
-let labour=parseFloat(document.getElementById('labour').value)||0;
-let margin=parseFloat(document.getElementById('margin').value)||0;
-let qty=parseFloat(document.getElementById('qty').value)||1;
-let surfaceArea=0;
-if(ptype=="Box"){
-surfaceArea=
-2*((L*B)+(B*H)+(L*H));
-}
-else{
-surfaceArea=
-(2*((B*H)+(L*H)))+(L*B);
-}
-let sqft=surfaceArea/144;
-let rate=0;
-if(material=="Indian") rate=50;
-if(material=="Imported") rate=85;
-if(material=="Colored") rate=90;
-let thicknessMultiplier=
-(thickness=="3mm")?1:1.4;
-let complexityCost=0;
-if(complexity=="Simple") complexityCost=30;
-if(complexity=="Medium") complexityCost=50;
-if(complexity=="Premium") complexityCost=150;
-let materialCost=
-sqft*rate*thicknessMultiplier*1.15;
-let costPrice=
-materialCost+
-complexityCost+
-labour;
-let sellingPrice=
-costPrice/(1-margin/100);
-let roundedPrice=
-Math.round(sellingPrice/10)*10;
-let total=
-roundedPrice*qty;
+function test(){
+let L=document.getElementById('L').value;
+let B=document.getElementById('B').value;
+let H=document.getElementById('H').value;
+
 document.getElementById('result').innerHTML=
-`
-<b>Surface Area:</b> ${surfaceArea.toFixed(2)} sq in<br><br>
-<b>Surface Area:</b> ${sqft.toFixed(3)} sq ft<br><br>
-<b>Material Cost:</b> ₹${materialCost.toFixed(2)}<br><br>
-<b>Complexity Cost:</b> ₹${complexityCost}<br><br>
-<b>Labour Cost:</b> ₹${labour}<br><br>
-<b>Total Cost Price:</b> ₹${costPrice.toFixed(2)}<br><br>
-<b>Selling Price:</b> ₹${sellingPrice.toFixed(2)}<br><br>
-<h2>Rounded Unit Price: ₹${roundedPrice}</h2>
-<h2>Total Order Value: ₹${total}</h2>
-`;
+"Size : "+L+" x "+B+" x "+H;
 }
 </script>
+
 </body>
 </html>
