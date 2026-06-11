@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Woodcraft Original Costing Pro V2</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f4f4f4;margin:0;padding:20px}
+.card{max-width:800px;margin:auto;background:#fff;padding:20px;border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,.12)}
+h1,h2{text-align:center}
+label{display:block;margin-top:12px;font-weight:bold}
+input,select{width:100%;padding:10px;margin-top:5px;box-sizing:border-box}
+button{width:100%;padding:12px;margin-top:15px;border:none;border-radius:8px;background:#000;color:#fff;font-size:16px}
+.result{margin-top:20px;padding:15px;background:#fafafa;border-radius:10px}
+.small{font-size:12px;color:#666}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>Woodcraft Original</h1>
+<h2>Acrylic Costing Pro V2</h2>
+
+<label>Customer Name</label>
+<input id="customer">
+
+<label>Length (inches)</label>
+<input type="number" id="L">
+
+<label>Breadth (inches)</label>
+<input type="number" id="B">
+
+<label>Height (inches)</label>
+<input type="number" id="H">
+
+<label>Product Type</label>
+<select id="ptype"><option>Box</option><option>Tray</option></select>
+
+<label>Material</label>
+<select id="material"><option>Indian</option><option>Imported</option><option>Colored</option></select>
+
+<label>Thickness</label>
+<select id="thickness"><option>3mm</option><option>4mm</option></select>
+
+<label>Complexity</label>
+<select id="complexity"><option>Simple</option><option>Medium</option><option>Premium</option></select>
+
+<label>Additional Labour Charge (₹)</label>
+<input type="number" id="labour" value="0">
+
+<label>Margin %</label>
+<input type="number" id="margin" value="35">
+
+<label>Quantity</label>
+<input type="number" id="qty" value="1">
+
+<button onclick="calculate()">Calculate</button>
+
+<div class="result" id="result">Enter values and press Calculate.</div>
+
+<p class="small">Rates used: Indian ₹50, Imported ₹85, Colored ₹90. Wastage 15%.</p>
+</div>
+
+<script>
+function calculate(){
+const L=parseFloat(document.getElementById('L').value)||0;
+const B=parseFloat(document.getElementById('B').value)||0;
+const H=parseFloat(document.getElementById('H').value)||0;
+const qty=parseFloat(document.getElementById('qty').value)||1;
+const labour=parseFloat(document.getElementById('labour').value)||0;
+const margin=parseFloat(document.getElementById('margin').value)||0;
+const customer=document.getElementById('customer').value||"-";
+
+const ptype=document.getElementById('ptype').value;
+const material=document.getElementById('material').value;
+const thickness=document.getElementById('thickness').value;
+const complexity=document.getElementById('complexity').value;
+
+let area=0;
+if(ptype==="Box"){
+ area=2*((L*B)+(B*H)+(L*H));
+}else{
+ area=(2*((B*H)+(L*H)))+(L*B);
+}
+
+const sqft=area/144;
+
+let rate=50;
+if(material==="Imported") rate=85;
+if(material==="Colored") rate=90;
+
+const multiplier=(thickness==="3mm")?1:1.4;
+
+let comp=30;
+if(complexity==="Medium") comp=50;
+if(complexity==="Premium") comp=150;
+
+const materialCost=sqft*rate*multiplier*1.15;
+const costPrice=materialCost+comp+labour;
+const sellingPrice=costPrice/(1-margin/100);
+const rounded=Math.round(sellingPrice/10)*10;
+const total=rounded*qty;
+
+document.getElementById('result').innerHTML=`
+<b>Customer:</b> ${customer}<br><br>
+<b>Surface Area:</b> ${area.toFixed(2)} sq in<br>
+<b>Surface Area:</b> ${sqft.toFixed(3)} sq ft<br><br>
+<b>Material Cost:</b> ₹${materialCost.toFixed(2)}<br>
+<b>Complexity Cost:</b> ₹${comp}<br>
+<b>Labour Cost:</b> ₹${labour.toFixed(2)}<br><br>
+<b>Total Cost Price:</b> ₹${costPrice.toFixed(2)}<br>
+<b>Margin:</b> ${margin}%<br>
+<b>Selling Price:</b> ₹${sellingPrice.toFixed(2)}<br><br>
+<h3>Rounded Unit Price: ₹${rounded}</h3>
+<h3>Total Order Value: ₹${total}</h3>`;
+}
+</script>
+</body>
+</html>
